@@ -1,8 +1,7 @@
-
 <template>
   <main>
-  <h1>
-    Каталог
-  </h1>
+    <div class="center-wrapper">
+      <h1>Главная</h1>
+    </div>
   </main>
 </template>
