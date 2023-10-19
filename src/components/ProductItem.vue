@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import AppButton from './AppButton.vue';
 import { type Product } from '@/types/Product';
+import { useBasket } from '@/stores/basket';
+
+const { addItemToBasket } = useBasket();
 
 interface Props {
     product: Product,
@@ -16,9 +20,10 @@ defineProps<Props>();
             <div class="product__name">{{ product.name }}</div>
             <div class="product__price-wrapper">
                 <div class="product__price product__price--new">{{ product.price.retail }} ₽</div>
-                <div v-if="product.price.discountRate > 0" class="product__price product__price--old">{{ product.price.catalog }} ₽</div>
+                <div v-if="product.price.discountRate > 0" class="product__price product__price--old">{{
+                    product.price.catalog }} ₽</div>
             </div>
-            <button class="product__btn-basket">В корзину</button>
+            <AppButton @click="addItemToBasket(product)" class="product__btn-basket">В корзину</AppButton>
         </div>
     </div>
 </template>
@@ -26,7 +31,7 @@ defineProps<Props>();
 <style scoped lang="scss">
 .product {
     width: 300px;
-    box-shadow: 0 0 10px  #80a8e2;
+    box-shadow: 0 0 10px #80a8e2;
     border-radius: 10px;
     position: relative;
     display: flex;
@@ -108,18 +113,11 @@ defineProps<Props>();
     // .product__btn-basket
 
     &__btn-basket {
+        width: 100%;
         height: 40px;
-        cursor: pointer;
-        border-radius: 5px;
-        border: none;
-        outline: none;
         background-color: #80a8e2;
         color: #ffffff;
-        font-size: 16px;
         margin-top: auto;
-        display: flex;
-        align-items: center;
-        justify-content: center;
     }
 }
 </style>
