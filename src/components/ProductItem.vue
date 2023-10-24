@@ -3,7 +3,7 @@ import AppButton from './AppButton.vue';
 import { type Product } from '@/types/Product';
 import { useBasket } from '@/stores/basket';
 
-const { addItemToBasket } = useBasket();
+const { addItemToBasket, hasProductInBasket } = useBasket();
 
 interface Props {
     product: Product,
@@ -23,7 +23,8 @@ defineProps<Props>();
                 <div v-if="product.price.discountRate > 0" class="product__price product__price--old">{{
                     product.price.catalog }} ₽</div>
             </div>
-            <AppButton @click="addItemToBasket(product)" class="product__btn-basket">В корзину</AppButton>
+            <div v-if="hasProductInBasket(product)" class="product__status">Товар добавлен в корзину</div>
+            <AppButton v-else @click="addItemToBasket(product)" class="product__btn-basket">В корзину</AppButton>
         </div>
     </div>
 </template>
@@ -118,6 +119,20 @@ defineProps<Props>();
         background-color: #80a8e2;
         color: #ffffff;
         margin-top: auto;
+    }
+
+    // .product__status
+
+    &__status {
+        width: 100%;
+        height: 40px;
+        background-color: #80a8e2;
+        color: #ffffff;
+        margin-top: auto;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 </style>

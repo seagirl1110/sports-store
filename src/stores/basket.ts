@@ -7,7 +7,7 @@ export const useBasket = defineStore('basket', () => {
   const basket: Ref<BasketItem[]> = ref([]);
 
   function addItemToBasket(product: Product) {
-    if (isHasProductInBasket(product)) {
+    if (hasProductInBasket(product)) {
       incProductCount(product);
     }
     else {
@@ -44,7 +44,7 @@ export const useBasket = defineStore('basket', () => {
     }
   }
 
-  function isHasProductInBasket(product: Product) {
+  function hasProductInBasket(product: Product) {
     for (const item of basket.value) {
       if (item.id === product.productId) {
         return true;
@@ -60,5 +60,5 @@ export const useBasket = defineStore('basket', () => {
 
   // const doubleCount = computed(() => count.value * 2)
 
-  return { basket, addItemToBasket, removeItemFromBasket, incProductCount, decProductCount }
+  return { basket, addItemToBasket, removeItemFromBasket, incProductCount, decProductCount, hasProductInBasket }
 })
