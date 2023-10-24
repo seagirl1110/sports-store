@@ -97,7 +97,6 @@ defineProps<Props>();
     // .product__name
 
     &__name {
-        font-size: 16px;
         text-align: end;
     }
 
@@ -123,7 +122,6 @@ defineProps<Props>();
     // .product__price
 
     &__price {
-        font-size: 16px;
 
         // .product__price--new
 
