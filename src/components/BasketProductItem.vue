@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { type Product } from '@/types/Product';
+import { type BasketItem } from '@/types/Basket';
 import AppButton from './AppButton.vue';
 import { useBasket } from '@/stores/basket';
 
 const { removeItemFromBasket } = useBasket();
 
 interface Props {
-    product: Product,
+    item: BasketItem,
 }
 
 defineProps<Props>();
@@ -14,23 +14,27 @@ defineProps<Props>();
 
 <template>
     <div class="product">
-        <img :src="product.media.photoImages[0].mobile" :alt="product.name" class="product__image">
-        <div v-if="product.price.discountRate > 0" class="product__discount">-{{ product.price.discountRate }}%</div>
+        <img :src="item.product.media.photoImages[0].mobile" :alt="item.product.name" class="product__image">
+        <div v-if="item.product.price.discountRate > 0" class="product__discount">-{{ item.product.price.discountRate }}%
+        </div>
         <div class="product__content">
-            <div class="product__name">{{ product.name }}</div>
+            <div class="product__name">{{ item.product.name }}</div>
             <div class="product__price-wrapper">
-                <div class="product__price product__price--new">{{ product.price.retail }} ₽</div>
-                <div v-if="product.price.discountRate > 0" class="product__price product__price--old">{{
-                    product.price.catalog }} ₽</div>
-                <div v-if="product.price.discountAmount > 0" class="product__discount-amount">Выгода: {{
-                    product.price.discountAmount }} ₽</div>
+                <div class="product__price product__price--new">{{ item.product.price.retail * item.count }} ₽</div>
+                <div v-if="item.product.price.discountRate > 0" class="product__price product__price--old">{{
+                    item.product.price.catalog * item.count }} ₽</div>
+                <div v-if="item.product.price.discountAmount > 0" class="product__discount-amount">Выгода: {{
+                    item.product.price.discountAmount * item.count }} ₽</div>
             </div>
             <div class="product__count-wrapper">
-                <AppButton class="product__btn-count">-</AppButton>
-                <div class="product__count">1</div>
-                <AppButton class="product__btn-count">+</AppButton>
+                <div class="product__count-inner">
+                    <AppButton class="product__btn-count">-</AppButton>
+                    <div class="product__count">{{ item.count }}</div>
+                    <AppButton class="product__btn-count">+</AppButton>
+                </div>
+                <div v-show="item.count > 1" class="product__price--count">{{ item.product.price.retail }} ₽/шт.</div>
             </div>
-            <AppButton @click="removeItemFromBasket(product)" class="product__btn-del">
+            <AppButton @click="removeItemFromBasket(item.product)" class="product__btn-del">
                 <svg id="line_icons" viewBox="0 0 74 74" xmlns="http://www.w3.org/2000/svg" data-name="line icons">
                     <path
                         d="m61.909 23.754h-49.818a3.368 3.368 0 0 1 -3.365-3.365v-6.676a3.369 3.369 0 0 1 3.365-3.366h49.818a3.369 3.369 0 0 1 3.365 3.366v6.676a3.368 3.368 0 0 1 -3.365 3.365zm-49.818-11.407a1.367 1.367 0 0 0 -1.365 1.366v6.676a1.366 1.366 0 0 0 1.365 1.365h49.818a1.366 1.366 0 0 0 1.365-1.365v-6.676a1.367 1.367 0 0 0 -1.365-1.366z" />
@@ -104,6 +108,15 @@ defineProps<Props>();
 
     &__count-wrapper {
         display: flex;
+        flex-direction: column;
+        row-gap: 5px;
+        align-items: center;
+    }
+    
+    // .product__count-inner
+
+    &__count-inner {
+        display: flex;
         column-gap: 20px;
         align-items: center;
     }
@@ -148,6 +161,12 @@ defineProps<Props>();
             text-decoration: line-through;
             text-decoration-color: #f44336;
             text-decoration-thickness: 2px;
+        }
+
+        // .product__price--count
+
+        &--count {
+            font-size: 14px;
         }
     }
 
