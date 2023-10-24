@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { type BasketItem } from '@/types/Basket';
 import AppButton from './AppButton.vue';
+import ProductCount from './ProductCount.vue';
 import { useBasket } from '@/stores/basket';
 
 const { removeItemFromBasket } = useBasket();
@@ -27,11 +28,7 @@ defineProps<Props>();
                     item.product.price.discountAmount * item.count }} ₽</div>
             </div>
             <div class="product__count-wrapper">
-                <div class="product__count-inner">
-                    <AppButton class="product__btn-count">-</AppButton>
-                    <div class="product__count">{{ item.count }}</div>
-                    <AppButton class="product__btn-count">+</AppButton>
-                </div>
+                <ProductCount :item="item"/>
                 <div v-show="item.count > 1" class="product__price--count">{{ item.product.price.retail }} ₽/шт.</div>
             </div>
             <AppButton @click="removeItemFromBasket(item.product)" class="product__btn-del">
@@ -112,25 +109,6 @@ defineProps<Props>();
         row-gap: 5px;
         align-items: center;
     }
-    
-    // .product__count-inner
-
-    &__count-inner {
-        display: flex;
-        column-gap: 20px;
-        align-items: center;
-    }
-
-    // .product__btn-count
-
-    &__btn-count {
-        font-size: 20px;
-        background-color: #e8e8e8;
-    }
-
-    // .product__count
-
-    &__count {}
 
     // .product__price-wrapper
 

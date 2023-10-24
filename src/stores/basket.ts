@@ -8,11 +8,7 @@ export const useBasket = defineStore('basket', () => {
 
   function addItemToBasket(product: Product) {
     if (isHasProductInBasket(product)) {
-      const currentProduct: BasketItem | undefined = basket.value.find(item => item.id === product.productId);
-      if (!currentProduct) {
-        return
-      };
-      currentProduct.count += 1;
+      incProductCount(product);
     }
     else {
       const item = {
@@ -28,6 +24,26 @@ export const useBasket = defineStore('basket', () => {
     basket.value = basket.value.filter(item => item.product.productId !== product.productId);
   }
 
+  function incProductCount(product: Product) {
+    const item: BasketItem | undefined = findProductInBasket(product);
+    if (!item) {
+      return
+    };
+    item.count += 1;
+  }
+
+  function decProductCount(product: Product) {
+    const item: BasketItem | undefined = findProductInBasket(product);
+    if (!item) {
+      return
+    };
+    if (item.count === 1) {
+      removeItemFromBasket(product);
+    } else {
+      item.count -= 1;
+    }
+  }
+
   function isHasProductInBasket(product: Product) {
     for (const item of basket.value) {
       if (item.id === product.productId) {
@@ -37,7 +53,12 @@ export const useBasket = defineStore('basket', () => {
     return false;
   }
 
+  function findProductInBasket(product: Product) {
+    const item: BasketItem | undefined = basket.value.find(item => item.id === product.productId);
+    return item;
+  }
+
   // const doubleCount = computed(() => count.value * 2)
 
-  return { basket, addItemToBasket, removeItemFromBasket }
+  return { basket, addItemToBasket, removeItemFromBasket, incProductCount, decProductCount }
 })
