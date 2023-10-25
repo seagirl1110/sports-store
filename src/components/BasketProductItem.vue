@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { type BasketItem } from '@/types/Basket';
 import AppButton from './AppButton.vue';
-import ProductCount from './ProductCount.vue';
+import AppCount from './AppCount.vue';
 import { useBasket } from '@/stores/basket';
 
-const { removeItemFromBasket } = useBasket();
+const { removeItemFromBasket, decProductCount, incProductCount } = useBasket();
 
 interface Props {
     item: BasketItem,
@@ -28,7 +28,7 @@ defineProps<Props>();
                     item.product.price.discountAmount * item.count }} ₽</div>
             </div>
             <div class="product__count-wrapper">
-                <ProductCount :item="item"/>
+                <AppCount :count="item.count" @dec-count="decProductCount(item.product)" @inc-count="incProductCount(item.product)"/>
                 <div v-show="item.count > 1" class="product__price--count">{{ item.product.price.retail }} ₽/шт.</div>
             </div>
             <AppButton @click="removeItemFromBasket(item.product)" class="product__btn-del">
