@@ -1,15 +1,19 @@
 <script setup lang="ts">
+import { computed, type ComputedRef } from 'vue';
 import AppButton from './AppButton.vue';
+import AppCount from './AppCount.vue';
 import { type Product } from '@/types/Product';
+import { type BasketItem } from '@/types/Basket';
 import { useBasket } from '@/stores/basket';
 
-const { addItemToBasket, hasProductInBasket } = useBasket();
+const { addItemToBasket, incProductCount, decProductCount, findProductInBasket } = useBasket();
 
 interface Props {
     product: Product,
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
+const basketItem: ComputedRef<BasketItem | undefined> = computed(() => findProductInBasket(props.product));
 </script>
 
 <template>
@@ -23,7 +27,11 @@ defineProps<Props>();
                 <div v-if="product.price.discountRate > 0" class="product__price product__price--old">{{
                     product.price.catalog }} ₽</div>
             </div>
-            <div v-if="hasProductInBasket(product)" class="product__status">Товар добавлен в корзину</div>
+            <div v-if="basketItem" class="product__status-wrapper">
+                <AppCount :count="basketItem.count" @dec-count="decProductCount(product)"
+                    @inc-count="incProductCount(product)" />
+                <div class="product__status">Товар добавлен в корзину</div>
+            </div>
             <AppButton v-else @click="addItemToBasket(product)" class="product__btn-basket">В корзину</AppButton>
         </div>
     </div>
@@ -119,6 +127,15 @@ defineProps<Props>();
         background-color: #80a8e2;
         color: #ffffff;
         margin-top: auto;
+    }
+
+    // .product__status-wrapper
+
+    &__status-wrapper {
+        display: flex;
+        flex-direction: column;
+        row-gap: 5px;
+        align-items: center;
     }
 
     // .product__status

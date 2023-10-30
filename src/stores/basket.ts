@@ -1,4 +1,4 @@
-import { ref, computed, type Ref } from 'vue';
+import { ref, type Ref } from 'vue';
 import { defineStore } from 'pinia';
 import { type Product } from '@/types/Product';
 import { type BasketItem } from '@/types/Basket';
@@ -6,11 +6,10 @@ import { type BasketItem } from '@/types/Basket';
 export const useBasket = defineStore('basket', () => {
   const basket: Ref<BasketItem[]> = ref([]);
 
-  function addItemToBasket(product: Product) {
+  function addItemToBasket(product: Product): void {
     if (hasProductInBasket(product)) {
       incProductCount(product);
-    }
-    else {
+    } else {
       const item = {
         product,
         id: product.productId,
@@ -20,11 +19,11 @@ export const useBasket = defineStore('basket', () => {
     }
   }
 
-  function removeItemFromBasket(product: Product) {
+  function removeItemFromBasket(product: Product): void {
     basket.value = basket.value.filter(item => item.product.productId !== product.productId);
   }
 
-  function incProductCount(product: Product) {
+  function incProductCount(product: Product): void {
     const item: BasketItem | undefined = findProductInBasket(product);
     if (!item) {
       return
@@ -32,7 +31,7 @@ export const useBasket = defineStore('basket', () => {
     item.count += 1;
   }
 
-  function decProductCount(product: Product) {
+  function decProductCount(product: Product): void {
     const item: BasketItem | undefined = findProductInBasket(product);
     if (!item) {
       return
@@ -44,7 +43,7 @@ export const useBasket = defineStore('basket', () => {
     }
   }
 
-  function hasProductInBasket(product: Product) {
+  function hasProductInBasket(product: Product): boolean {
     for (const item of basket.value) {
       if (item.id === product.productId) {
         return true;
@@ -53,12 +52,10 @@ export const useBasket = defineStore('basket', () => {
     return false;
   }
 
-  function findProductInBasket(product: Product) {
+  function findProductInBasket(product: Product): BasketItem | undefined {
     const item: BasketItem | undefined = basket.value.find(item => item.id === product.productId);
     return item;
   }
 
-  // const doubleCount = computed(() => count.value * 2)
-
-  return { basket, addItemToBasket, removeItemFromBasket, incProductCount, decProductCount, hasProductInBasket }
+  return { basket, addItemToBasket, removeItemFromBasket, incProductCount, decProductCount, findProductInBasket }
 })
