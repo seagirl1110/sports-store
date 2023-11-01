@@ -9,7 +9,7 @@ export interface Product {
     price: Price,
 }
 
-interface Size {
+export interface Size {
     id: string,
     code: string,
     isAvailableOnline: boolean,

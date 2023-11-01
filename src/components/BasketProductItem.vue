@@ -20,6 +20,7 @@ defineProps<Props>();
         </div>
         <div class="product__content">
             <div class="product__name">{{ item.product.name }}</div>
+            <div class="product__size">Размер: {{ item.size.sizeEur }}</div>
             <div class="product__price-wrapper">
                 <div class="product__price product__price--new">{{ item.product.price.retail * item.count }} ₽</div>
                 <div v-if="item.product.price.discountRate > 0" class="product__price product__price--old">{{
@@ -28,10 +29,10 @@ defineProps<Props>();
                     item.product.price.discountAmount * item.count }} ₽</div>
             </div>
             <div class="product__count-wrapper">
-                <AppCount :count="item.count" @dec-count="decProductCount(item.product)" @inc-count="incProductCount(item.product)"/>
+                <AppCount :count="item.count" @dec-count="decProductCount(item.product, item.size)" @inc-count="incProductCount(item.product, item.size)"/>
                 <div v-show="item.count > 1" class="product__price--count">{{ item.product.price.retail }} ₽/шт.</div>
             </div>
-            <AppButton @click="removeItemFromBasket(item.product)" class="product__btn-del">
+            <AppButton @click="removeItemFromBasket(item.product, item.size)" class="product__btn-del">
                 <svg id="line_icons" viewBox="0 0 74 74" xmlns="http://www.w3.org/2000/svg" data-name="line icons">
                     <path
                         d="m61.909 23.754h-49.818a3.368 3.368 0 0 1 -3.365-3.365v-6.676a3.369 3.369 0 0 1 3.365-3.366h49.818a3.369 3.369 0 0 1 3.365 3.366v6.676a3.368 3.368 0 0 1 -3.365 3.365zm-49.818-11.407a1.367 1.367 0 0 0 -1.365 1.366v6.676a1.366 1.366 0 0 0 1.365 1.365h49.818a1.366 1.366 0 0 0 1.365-1.365v-6.676a1.367 1.367 0 0 0 -1.365-1.366z" />
@@ -98,6 +99,12 @@ defineProps<Props>();
 
     &__name {
         text-align: end;
+    }
+
+    // .product__size
+
+    &__size {
+        color: #036ecb;
     }
 
     // .product__count-wrapper
