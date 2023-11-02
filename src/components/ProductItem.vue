@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, type Ref, computed, type ComputedRef } from 'vue';
+import 'vue3-carousel/dist/carousel.css'
+import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 import AppButton from './AppButton.vue';
 import AppCount from './AppCount.vue';
 import { type Product, type Size } from '@/types/Product';
@@ -29,7 +31,15 @@ const basketItem: ComputedRef<BasketItem | undefined> = computed(() => {
 
 <template>
     <div class="product">
-        <img :src="product.media.photoImages[0].mobile" :alt="product.name" class="product__image">
+        <carousel :items-to-show="1">
+            <slide v-for="image in product.media.photoImages" :key="image.mobile">
+                <img :src="image.mobile" :alt="product.name" class="product__image">
+            </slide>
+            <template #addons>
+                <navigation />
+                <pagination />
+            </template>
+        </carousel>
         <div v-if="product.price.discountRate > 0" class="product__discount">-{{ product.price.discountRate }}%</div>
         <div class="product__content">
             <div class="product__name">{{ product.name }}</div>
@@ -73,6 +83,8 @@ const basketItem: ComputedRef<BasketItem | undefined> = computed(() => {
     position: relative;
     display: flex;
     flex-direction: column;
+
+    // .product:hover
 
     &:hover {
         box-shadow: 0 0 15px #587bac;
@@ -210,5 +222,9 @@ const basketItem: ComputedRef<BasketItem | undefined> = computed(() => {
         align-items: center;
         justify-content: center;
     }
+}
+
+.product:deep(.carousel__viewport) {
+    border-radius: 10px 10px 0 0;
 }
 </style>
