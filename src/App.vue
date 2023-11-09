@@ -18,7 +18,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <style scoped lang="scss">
 .header {
-  min-height: 40px;
+  min-height: 100px;
   background-color: #e4edff;
   display: flex;
   align-items: center;
@@ -26,13 +26,19 @@ import { RouterLink, RouterView } from 'vue-router'
 }
 .menu {
   display: flex;
-  column-gap: 30px;
+  column-gap: 40px;
   justify-content: center;
 
   // .menu__item
 
   &__item {
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.45;
+    letter-spacing: 0.03rem;
     text-decoration: none;
+    color: rgba(0, 0, 0, 0.8);
   }
 }
 </style>
